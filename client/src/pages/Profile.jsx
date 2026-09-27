@@ -1,21 +1,146 @@
 import { useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
+import { ID, storage, bucketId } from "../appwrite";
+
 
 export default function Profile() {
-  const { currentUser} = useSelector((state) => state.user);
+  const fileRef = useRef(null);
+  const { currentUser } = useSelector((state) => state.user);
+
+  const [file, setFile] = useState(undefined);
+  const [fileperc, setFilePerc] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  console.log(formData);
+  console.log(fileperc);
+  console.log(fileUploadError);
+
+
+ 
+
+  const handleFileUpload = async (file) => {
+    try {
+      setFileUploadError(false);
+      setFilePerc(0);
+
+      // Check image size (2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        setFileUploadError(true);
+        return;
+      }
+
+      // Upload image to Appwrite Storage
+      const uploadedFile = await storage.createFile(
+  bucketId,
+  ID.unique(),
+  file
+);
+
+      // Get image URL from Appwrite
+  const downloadURL = storage.getFileView(
+  bucketId,
+  uploadedFile.$id
+);
+
+      setFilePerc(100);
+
+      setFormData({
+        ...formData,
+        avatar: downloadURL,
+      });
+
+    } catch (error) {
+      console.log(error);
+      setFileUploadError(true);
+      setFilePerc(0);
+    }
+  };
+
+   useEffect(() => {
+  if (file) {
+    handleFileUpload(file);
+  }
+}, [file]);
+
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
+
       <form className="flex flex-col gap-4">
-         <img src={currentUser.avatar} alt='profile' className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2" />
-           <input type='text' placeholder="username" id = 'username' className="border p-3 rounded-lg" />
-           <input type='email' placeholder="email" id = 'email' className="border p-3 rounded-lg" />
-           <input type='text' placeholder="password" id = 'password' className="border p-3 rounded-lg" />
-           <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80" >Update</button>
+
+        <input
+          onChange={(e) => setFile(e.target.files[0])}
+          type="file"
+          ref={fileRef}
+          hidden
+          accept="image/*"
+        />
+
+        <img
+          onClick={() => fileRef.current.click()}
+          src={formData.avatar || currentUser.avatar}
+          alt="profile"
+          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
+        />
+
+        <p className="text-sm self-center">
+          {fileUploadError ? (
+            <span className="text-red-700 text-sm">
+              Error uploading file(image must be less than 2MB)
+            </span>
+          ) : fileperc > 0 && fileperc < 100 ? (
+            <span className="text-slate-700 text-sm">
+              Uploading: {fileperc}%
+            </span>
+          ) : fileperc === 100 ? (
+            <span className="text-green-700 text-sm">
+              Upload complete
+            </span>
+          ) : (
+            ""
+          )}
+        </p>
+
+        <input
+          type="text"
+          placeholder="username"
+          id="username"
+          className="border p-3 rounded-lg"
+        />
+
+        <input
+          type="email"
+          placeholder="email"
+          id="email"
+          className="border p-3 rounded-lg"
+        />
+
+        <input
+          type="text"
+          placeholder="password"
+          id="password"
+          className="border p-3 rounded-lg"
+        />
+
+        <button
+          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+        >
+          Update
+        </button>
+
       </form>
+
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete account</span>
-        <span className="text-red-700 cursor-pointer">Sign out</span>
+        <span className="text-red-700 cursor-pointer">
+          Delete account
+        </span>
+
+        <span className="text-red-700 cursor-pointer">
+          Sign out
+        </span>
       </div>
     </div>
-  )
+  );
 }
