@@ -17,9 +17,16 @@ export default function Profile() {
   const [userListings, setUserListings] = useState([]);
   const dispatch = useDispatch();
 
-  console.log(formData);
-  console.log(fileperc);
-  console.log(fileUploadError);
+  useEffect(() => {
+    if (currentUser) {
+        setFormData({
+            username: currentUser.username,
+            email: currentUser.email,
+            avatar: currentUser.avatar,
+        });
+    }
+}, [currentUser]);
+
 
    useEffect(() => {
   if (file) {
@@ -177,11 +184,11 @@ export default function Profile() {
               Error uploading file(image must be less than 2MB)
             </span>
           ) : fileperc > 0 && fileperc < 100 ? (
-            <span className="text-slate-700 text-sm">
+            <span className="text-navy-900 text-sm">
               Uploading: {fileperc}%
             </span>
           ) : fileperc === 100 ? (
-            <span className="text-green-700 text-sm">
+            <span className="text-gold-600 text-sm">
               Upload complete
             </span>
           ) : (
@@ -211,11 +218,12 @@ export default function Profile() {
           type="password"
           placeholder="password"
           id="password"
+          onChange={handleChange}
           className="border p-3 rounded-lg"
         />
 
         <button disabled = {loading}
-          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
+          className="bg-navy-900 hover:bg-navy-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
           {loading ? 'Loading...' : 'Update'}
         </button>
         <Link className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95" to = {"/create-listing"}>
@@ -232,7 +240,7 @@ export default function Profile() {
         </span>
       </div>
         <p className="text-red-700 mt-5">{error ? error : ''}</p>
-        <p className="text-green-700 mt-5">
+        <p className="text-gold-600 mt-5">
 
           {updateSuccess ? 'User is updated successfully! ' : ''}
           </p>
@@ -252,14 +260,14 @@ export default function Profile() {
             <Link to= {`/listing/${listing._id}`}>
               <img src={listing.imageUrls[0]} alt ='listing cover' className="h-16 w-16 object-contain"/>
             </Link>
-            <Link className="text-slate-700 font-semibold flex-1 hover:underline truncate" 
+            <Link className="text-navy-900 font-semibold flex-1 hover:underline truncate" 
             to={`/listing/${listing._id}`}>
                 <p>{listing.name}</p>
             </Link>
              <div className="flex flex-col items-center">
               <button onClick={() => handleListingDelete(listing._id)} className="text-red-700 uppercase">Delete</button>
               <Link to={`/update-listing/${listing._id}`}>
-              <button className="text-green-700 uppercase">Edit</button>
+              <button className="text-gold-600 uppercase">Edit</button>
               </Link>
              </div>
            </div>

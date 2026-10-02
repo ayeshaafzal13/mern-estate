@@ -125,6 +125,7 @@ const handleSubmit = async (e) => {
         setLoading(false);
         if(data.success === false) {
             setError(data.message);
+            return; 
         }
         navigate(`/listing/${data._id}`)
     } catch (error) {
@@ -135,7 +136,7 @@ const handleSubmit = async (e) => {
 
 return (
     <main className='p-3 max-w-4xl mx-auto'>
-        <h1 className='text-3xl front-semibold text-center my-7'> Create Listing</h1>
+        <h1 className='text-3xl font-semibold text-center my-7'> Create Listing</h1>
 
         <form onSubmit={handleSubmit} className='flex flex-col sm:flex-row gap-4'>
             <div className="flex flex-col gap-4 flex-1">
@@ -157,7 +158,7 @@ return (
                 value={formData.description}
                 />
                 <input 
-                type="address" 
+                type="text" 
                 placeholder="Address" 
                 className='border p-3 rounded-lg' id="address" 
                 required 
@@ -212,26 +213,25 @@ return (
 
                 <div className='flex flex-wrap gap-6'>
                     <div className='flex items-center gap-2'>
-                        <input type="number" id='bedrooms' min='1' max='10' required className='p-3 border border-gray-300' rounded-lg 
+                        <input type="number" id='bedrooms' min='1' max='10' required className='p-3 border border-gray-300 rounded-lg' 
                         onChange={handleChange}
                         value={formData.bedrooms}/>
                         <p>Beds</p>       
                     </div>
                       <div className='flex items-center gap-2'>
-                        <input type="number" id='bathrooms' min='1' max='10' required className='p-3 border border-gray-300' rounded-lg
+                        <input type="number" id='bathrooms' min='1' max='10' required className='p-3 border border-gray-300 rounded-lg'
                         onChange={handleChange}
                         value={formData.bathrooms} 
                         />
                         <p>Baths</p>       
                     </div>
                       <div className='flex items-center gap-2'>
-                        <input type="number" id='regularPrice' min='50' max='10000000' required className='p-3 border border-gray-300' rounded-lg 
+                        <input type="number" id='regularPrice' min='50' max='10000000' required className='p-3 border border-gray-300 rounded-lg' 
                         onChange={handleChange}
                         value={formData.regularPrice}
                         />
                         <div className='flex flex-col items-center'>
                         <p>Regular Price</p> 
-                        <span className='text-xs'>($ /month)</span>
                          {formData.type === 'rent' && (
                   <span className='text-xs'>($ / month)</span>
                 )}
@@ -239,12 +239,11 @@ return (
                     </div>
                     {formData.offer && (
                            <div className='flex items-center gap-2'>
-                        <input type="number" id='discountPrice' min='0' max='10000000' required className='p-3 border border-gray-300' rounded-lg 
+                        <input type="number" id='discountPrice' min='0' max='10000000' required className='p-3 border border-gray-300 rounded-lg' 
                         onChange={handleChange}
                         value={formData.discountPrice}/>
                         <div className='flex flex-col items-center'>
                             <p>Discounted price</p>  
-                            <span className='text-xs'>($ / month)</span>
                              {formData.type === 'rent' && (
                     <span className='text-xs'>($ / month)</span>
                   )}
@@ -285,7 +284,7 @@ return (
     type="button"
     disabled={uploading}
     onClick={handleImageSubmit}
-    className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80"
+    className="p-3 text-gold-600 border border-gold-600 rounded uppercase hover:shadow-lg disabled:opacity-80"
   >
     {uploading ? 'Uploading...' : 'Upload'}
   </button>
@@ -303,7 +302,7 @@ return (
             </div>
             ))
         }
-                <button disabled={loading || uploading} className='p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
+                <button disabled={loading || uploading} className='p-3 bg-navy-900 hover:bg-navy-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
                     {loading ? 'Creating...' : 'Create Listing'}
                 </button>
                 {error && <p className="text-red-700 text-sm">{error}</p>}

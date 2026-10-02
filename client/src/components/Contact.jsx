@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link } from 'react-router-dom';
+
 
 export default function Contact({listing}) {
     const [landlord, setLandlord] = useState(null);
@@ -51,7 +51,7 @@ export default function Contact({listing}) {
 
             <button
   onClick={openGmailPopup}
-  className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
+  className="bg-navy-900 hover:bg-navy-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
 >
   Send Message
 </button>

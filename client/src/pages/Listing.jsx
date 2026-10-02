@@ -90,7 +90,7 @@ export default function Listing() {
 
         <div className='fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer'>
             <FaShare
-              className='text-slate-500'
+              className='text-navy-500'
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
                 setCopied(true);
@@ -116,17 +116,19 @@ export default function Listing() {
               {listing.type === 'rent' && ' / month'}
             </p>
 
-            <p className='flex items-center mt-6 gap-2 text-slate-600  text-sm'>
-              <FaMapMarkerAlt className='text-green-700' />
-              {listing.address}
-            </p>
+            <p className='flex items-center mt-6 gap-2 text-navy-700 text-base font-bold'>
+    <FaMapMarkerAlt className='text-gold-600 text-lg' />
+    <span className='font-bold'>
+        {listing.address}
+    </span>
+</p>
 
             <div className='flex gap-4'>
-              <p className='bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
+              <p className='bg-navy-700 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
                 {listing.type === 'rent' ? 'For Rent' : 'For Sale'}
               </p>
               {listing.offer && (
-                <p className='bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
+                <p className='bg-gold-600 w-full max-w-[200px] text-white text-center p-1 rounded-md'>
                   ${+listing.regularPrice - +listing.discountPrice} OFF
                 </p>
               )}
@@ -136,7 +138,7 @@ export default function Listing() {
               <span className='font-semibold text-black'>Description - </span>
               {listing.description}
             </p>
-            <ul className='text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6'>
+            <ul className='text-navy-700 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6'>
               <li className='flex items-center gap-1 whitespace-nowrap '>
                 <FaBed className='text-lg' />
                 {listing.bedrooms > 1
@@ -158,8 +160,8 @@ export default function Listing() {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
-             {currentUser  && !contact && (
-                <button onClick={() => setContact(true)} className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3">
+             {currentUser && listing.userRef !== currentUser._id && !contact && (
+                <button onClick={() => setContact(true)} className="bg-navy-900 hover:bg-navy-700 text-white rounded-lg uppercase hover:opacity-95 p-3">
                     Contact landlord
                 </button>
              )}
